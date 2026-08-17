@@ -1,0 +1,1567 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Suara Digital Desa — Platform Transparansi APBDes</title>
+  <meta name="description" content="Platform transparansi Anggaran Pendapatan dan Belanja Desa (APBDes) dan partisipasi publik masyarakat desa.">
+  <link rel="icon" type="image/png" href="image_logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --primary: #1565C0;
+      --primary-dark: #0D47A1;
+      --primary-light: #E3F2FD;
+      --primary-medium: #90CAF9;
+      --secondary: #42A5F5;
+      --tertiary: #FFA726;
+      --bg: #F5F7FA;
+      --surface: #FFFFFF;
+      --text-primary: #1A1A2E;
+      --text-secondary: #6B7280;
+      --text-tertiary: #9CA3AF;
+      --border: #E5E7EB;
+      --success: #2E7D32;
+      --success-light: #E8F5E9;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.04);
+      --shadow-md: 0 4px 20px rgba(0,0,0,0.06);
+      --shadow-lg: 0 12px 40px rgba(0,0,0,0.08);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text-primary);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── NAVBAR ── */
+    .navbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      background: rgba(255,255,255,0.7);
+      backdrop-filter: blur(20px) saturate(180%);
+      border-bottom: 1px solid transparent;
+      transition: all 0.35s;
+    }
+
+    .navbar.scrolled {
+      background: rgba(255,255,255,0.95);
+      border-bottom-color: var(--border);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .nav-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 68px;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .nav-logo {
+      width: 38px; height: 38px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 900;
+      font-size: 1rem;
+      transition: transform 0.3s;
+    }
+
+    .nav-logo-img {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      object-fit: cover;
+      transition: transform 0.3s;
+    }
+
+    .nav-brand:hover .nav-logo-img { transform: scale(1.08) rotate(-3deg); }
+
+    .nav-brand-text {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 800;
+      font-size: 1.05rem;
+      color: var(--text-primary);
+      letter-spacing: -0.01em;
+    }
+
+    .nav-brand-text span { color: var(--primary); }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      padding: 8px 16px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-decoration: none;
+      border-radius: 10px;
+      transition: all 0.25s;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .nav-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 22px;
+      background: var(--primary);
+      color: white !important;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 0.88rem;
+      text-decoration: none;
+      transition: all 0.3s;
+      box-shadow: 0 2px 12px rgba(21, 101, 192, 0.25);
+    }
+
+    .nav-cta:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(21, 101, 192, 0.35);
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 6px;
+      border: none;
+      background: none;
+    }
+
+    .hamburger span {
+      width: 22px;
+      height: 2.5px;
+      background: var(--text-primary);
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 68px; left: 0; right: 0; bottom: 0;
+      background: rgba(255,255,255,0.98);
+      backdrop-filter: blur(20px);
+      z-index: 999;
+      padding: 2rem 1.5rem;
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: all 0.3s;
+    }
+
+    .mobile-menu.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .mobile-menu a {
+      display: block;
+      padding: 14px 0;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      text-decoration: none;
+      border-bottom: 1px solid var(--border);
+      transition: color 0.2s;
+    }
+
+    .mobile-menu a:hover { color: var(--primary); }
+
+    .mobile-menu .nav-cta {
+      display: block;
+      text-align: center;
+      margin-top: 1.5rem;
+      border-bottom: none;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      background: linear-gradient(160deg, #0A1628 0%, #0D2847 30%, #0D47A1 60%, #1565C0 85%, #1E88E5 100%);
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 20% 50%, rgba(66,165,245,0.15) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 20%, rgba(255,167,38,0.08) 0%, transparent 40%),
+        radial-gradient(ellipse at 50% 80%, rgba(21,101,192,0.2) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .hero-grid-bg {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 80px 80px;
+      pointer-events: none;
+    }
+
+    .hero-float {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.06;
+      background: white;
+      animation: float-slow ease-in-out infinite;
+    }
+
+    .hero-float:nth-child(1) { width: 400px; height: 400px; top: -100px; right: -100px; animation-duration: 20s; }
+    .hero-float:nth-child(2) { width: 250px; height: 250px; bottom: -50px; left: -50px; animation-duration: 16s; animation-delay: 2s; }
+    .hero-float:nth-child(3) { width: 150px; height: 150px; top: 40%; left: 15%; animation-duration: 22s; animation-delay: 5s; }
+
+    @keyframes float-slow {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(20px, -20px) scale(1.05); }
+      66% { transform: translate(-15px, 10px) scale(0.95); }
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 2;
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 8rem 1.5rem 4rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .hero-text { opacity: 0; transform: translateY(40px); animation: fade-up 0.8s ease-out 0.3s forwards; }
+
+    @keyframes fade-up { to { opacity: 1; transform: translateY(0); } }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 100px;
+      padding: 6px 16px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: rgba(255,255,255,0.9);
+      margin-bottom: 1.5rem;
+      backdrop-filter: blur(8px);
+    }
+
+    .hero-badge .dot {
+      width: 7px; height: 7px;
+      background: #4ADE80;
+      border-radius: 50%;
+      animation: blink 2s ease-in-out infinite;
+    }
+
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+    .hero h1 {
+      font-family: 'Poppins', sans-serif;
+      font-size: clamp(2.5rem, 5vw, 3.8rem);
+      font-weight: 900;
+      color: white;
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.2rem;
+    }
+
+    .hero h1 .highlight {
+      background: linear-gradient(135deg, #42A5F5, #FFA726);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      font-size: clamp(1rem, 1.5vw, 1.15rem);
+      color: rgba(255,255,255,0.7);
+      font-weight: 500;
+      line-height: 1.8;
+      margin-bottom: 2rem;
+      max-width: 480px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 30px;
+      background: white;
+      color: var(--primary-dark);
+      border: none;
+      border-radius: 14px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      text-decoration: none;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+    }
+
+    .btn-outline {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 30px;
+      background: transparent;
+      color: white;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 14px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-decoration: none;
+    }
+
+    .btn-outline:hover {
+      border-color: white;
+      background: rgba(255,255,255,0.1);
+    }
+
+    .hero-visual {
+      display: flex;
+      justify-content: center;
+      opacity: 0;
+      transform: translateY(40px) scale(0.95);
+      animation: fade-up 0.8s ease-out 0.6s forwards;
+    }
+
+    .phone-mockup {
+      position: relative;
+      width: 280px;
+      height: 560px;
+      background: linear-gradient(145deg, #1a1a2e, #16213e);
+      border-radius: 40px;
+      border: 3px solid rgba(255,255,255,0.1);
+      box-shadow: 0 30px 80px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05);
+      overflow: hidden;
+      animation: phone-float 6s ease-in-out infinite;
+    }
+
+    @keyframes phone-float {
+      0%, 100% { transform: translateY(0) rotate(-2deg); }
+      50%      { transform: translateY(-15px) rotate(-2deg); }
+    }
+
+    .phone-notch {
+      position: absolute;
+      top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 120px; height: 28px;
+      background: #0a0a0a;
+      border-radius: 0 0 18px 18px;
+      z-index: 3;
+    }
+
+    .phone-screen {
+      position: absolute;
+      top: 3px; left: 3px; right: 3px; bottom: 3px;
+      border-radius: 37px;
+      overflow: hidden;
+      background: var(--bg);
+    }
+
+    .phone-header {
+      background: var(--primary);
+      padding: 42px 18px 16px;
+      color: white;
+      text-align: center;
+    }
+
+    .phone-header h4 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 800;
+      margin-bottom: 2px;
+    }
+
+    .phone-header p { font-size: 0.6rem; opacity: 0.8; }
+
+    .phone-body { padding: 14px; }
+
+    .phone-card {
+      background: white;
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+
+    .phone-card-title {
+      font-size: 0.55rem;
+      font-weight: 700;
+      color: var(--text-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 6px;
+    }
+
+    .phone-stat {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .phone-stat-val {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .phone-stat-label { font-size: 0.55rem; color: var(--text-tertiary); }
+
+    .phone-bar {
+      height: 6px;
+      border-radius: 3px;
+      background: var(--border);
+      margin-top: 8px;
+      overflow: hidden;
+    }
+
+    .phone-bar-fill {
+      height: 100%;
+      border-radius: 3px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      animation: bar-grow 2s ease-out 1.5s both;
+    }
+
+    @keyframes bar-grow { from { width: 0; } }
+
+    .phone-bottom {
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0 14px;
+      border-top: 1px solid var(--border);
+      margin-top: 10px;
+    }
+
+    .phone-nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .phone-nav-icon {
+      width: 18px; height: 18px;
+      border-radius: 6px;
+      background: var(--primary-light);
+    }
+
+    .phone-nav-icon.active { background: var(--primary); }
+
+    .phone-nav-label { font-size: 0.45rem; font-weight: 600; color: var(--text-tertiary); }
+
+    /* ── STATS ── */
+    .stats {
+      max-width: 1120px;
+      margin: -3rem auto 0;
+      padding: 0 1.5rem;
+      position: relative;
+      z-index: 10;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .stat-item {
+      background: white;
+      padding: 2rem 1.5rem;
+      text-align: center;
+    }
+
+    .stat-number {
+      font-family: 'Poppins', sans-serif;
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--primary);
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+
+    .stat-label {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-tertiary);
+    }
+
+    /* ── SECTION COMMON ── */
+    .section {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 5rem 1.5rem;
+    }
+
+    .section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 0.8rem;
+    }
+
+    .section-label .bar {
+      width: 20px; height: 3px;
+      background: var(--primary);
+      border-radius: 2px;
+    }
+
+    .section-title {
+      font-family: 'Poppins', sans-serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+      font-weight: 800;
+      color: var(--text-primary);
+      letter-spacing: -0.02em;
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+
+    .section-desc {
+      font-size: 1.05rem;
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin-bottom: 3rem;
+      line-height: 1.8;
+    }
+
+    /* ── FEATURES ── */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .feature-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2rem;
+      transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-lg);
+      border-color: transparent;
+    }
+
+    .feature-card:hover::before { opacity: 1; }
+
+    .feature-icon {
+      width: 52px; height: 52px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.2rem;
+      transition: transform 0.3s;
+    }
+
+    .feature-card:hover .feature-icon { transform: scale(1.08) rotate(-3deg); }
+
+    .feature-icon svg { width: 26px; height: 26px; }
+
+    .fi-blue  { background: var(--primary-light); }
+    .fi-blue svg { fill: var(--primary); }
+    .fi-green { background: var(--success-light); }
+    .fi-green svg { fill: var(--success); }
+    .fi-orange { background: #FFF3E0; }
+    .fi-orange svg { fill: var(--tertiary); }
+
+    .feature-card h3 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: var(--text-primary);
+    }
+
+    .feature-card p {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    /* ── ABOUT ── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .about-visual {
+      position: relative;
+    }
+
+    .about-card-stack {
+      position: relative;
+      height: 400px;
+    }
+
+    .about-card {
+      position: absolute;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 1.5rem;
+      box-shadow: var(--shadow-md);
+      transition: transform 0.4s;
+    }
+
+    .about-card:hover { transform: translateY(-4px); }
+
+    .about-card:nth-child(1) {
+      top: 0; left: 0; width: 260px; z-index: 3;
+    }
+
+    .about-card:nth-child(2) {
+      top: 60px; right: 0; width: 240px; z-index: 2;
+    }
+
+    .about-card:nth-child(3) {
+      bottom: 0; left: 30px; width: 250px; z-index: 1;
+    }
+
+    .about-card-icon {
+      width: 40px; height: 40px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 0.8rem;
+      font-size: 1.2rem;
+    }
+
+    .about-card h4 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 0.3rem;
+    }
+
+    .about-card p {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .about-text h2 {
+      font-family: 'Poppins', sans-serif;
+      font-size: clamp(1.8rem, 3vw, 2.3rem);
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: 1rem;
+      letter-spacing: -0.02em;
+    }
+
+    .about-text p {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      margin-bottom: 1.2rem;
+      line-height: 1.8;
+    }
+
+    .about-list {
+      list-style: none;
+      padding: 0;
+      margin-top: 1.5rem;
+    }
+
+    .about-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 10px 0;
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+    }
+
+    .about-list .check {
+      min-width: 24px; height: 24px;
+      background: var(--success-light);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 1px;
+    }
+
+    .about-list .check svg { width: 14px; height: 14px; fill: var(--success); }
+
+    /* ── LEGAL ── */
+    .legal-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .legal-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2rem;
+      text-align: center;
+      transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+      text-decoration: none;
+      display: block;
+    }
+
+    .legal-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-lg);
+      border-color: transparent;
+    }
+
+    .legal-icon {
+      width: 60px; height: 60px;
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.2rem;
+      transition: transform 0.3s;
+    }
+
+    .legal-card:hover .legal-icon { transform: scale(1.08); }
+
+    .legal-icon svg { width: 28px; height: 28px; }
+
+    .li-blue  { background: var(--primary-light); }
+    .li-blue svg { fill: var(--primary); }
+    .li-green { background: var(--success-light); }
+    .li-green svg { fill: var(--success); }
+    .li-orange { background: #FFF3E0; }
+    .li-orange svg { fill: #E65100; }
+
+    .legal-card h3 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: var(--text-primary);
+    }
+
+    .legal-card p {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      margin-bottom: 1.2rem;
+      line-height: 1.7;
+    }
+
+    .legal-link {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: gap 0.2s;
+    }
+
+    .legal-card:hover .legal-link { gap: 8px; }
+
+    /* ── CONTACT ── */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+
+    .contact-info-card {
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      border-radius: 24px;
+      padding: 2.5rem;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .contact-info-card::before {
+      content: '';
+      position: absolute;
+      width: 200px; height: 200px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 50%;
+      top: -60px; right: -60px;
+    }
+
+    .contact-info-card h3 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+    }
+
+    .contact-info-card > p {
+      font-size: 0.95rem;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 2rem;
+      line-height: 1.7;
+    }
+
+    .contact-detail {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .contact-detail:last-child { border-bottom: none; }
+
+    .contact-detail-icon {
+      width: 40px; height: 40px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .contact-detail-icon svg { width: 20px; height: 20px; fill: white; }
+
+    .contact-detail-label { font-size: 0.75rem; font-weight: 600; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.04em; }
+    .contact-detail-value { font-size: 0.95rem; font-weight: 600; }
+
+    .contact-form-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 2.5rem;
+    }
+
+    .contact-form-card h3 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group { margin-bottom: 1rem; }
+
+    .form-group label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      color: var(--text-primary);
+      background: var(--bg);
+      transition: all 0.25s;
+      outline: none;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      border-color: var(--primary);
+      background: white;
+      box-shadow: 0 0 0 4px rgba(21,101,192,0.08);
+    }
+
+    .form-group textarea { resize: vertical; min-height: 100px; }
+
+    .form-submit {
+      width: 100%;
+      padding: 14px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .form-submit:hover {
+      background: var(--primary-dark);
+      box-shadow: 0 4px 15px rgba(21,101,192,0.3);
+    }
+
+    /* ── FOOTER ── */
+    .footer {
+      background: #0A1628;
+      color: white;
+      padding: 4rem 1.5rem 2rem;
+    }
+
+    .footer-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 3rem;
+    }
+
+    .footer-brand h3 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 800;
+      margin-bottom: 0.8rem;
+    }
+
+    .footer-brand h3 span { color: var(--secondary); }
+
+    .footer-brand p {
+      font-size: 0.88rem;
+      color: rgba(255,255,255,0.5);
+      line-height: 1.7;
+      max-width: 300px;
+    }
+
+    .footer-col h4 {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: rgba(255,255,255,0.4);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 1rem;
+    }
+
+    .footer-col a {
+      display: block;
+      padding: 6px 0;
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.7);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-col a:hover { color: white; }
+
+    .footer-bottom {
+      max-width: 1120px;
+      margin: 3rem auto 0;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.35);
+    }
+
+    /* ── SCROLL TO TOP ── */
+    .scroll-top {
+      position: fixed;
+      bottom: 2rem; right: 2rem;
+      width: 48px; height: 48px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.3s;
+      box-shadow: 0 4px 15px rgba(21, 101, 192, 0.3);
+      z-index: 999;
+    }
+
+    .scroll-top.show { opacity: 1; transform: translateY(0); }
+    .scroll-top:hover { background: var(--primary-dark); transform: translateY(-3px); }
+    .scroll-top svg { width: 22px; height: 22px; fill: white; }
+
+    .progress-bar {
+      position: fixed;
+      top: 0; left: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary), var(--tertiary));
+      z-index: 9999;
+      transition: width 0.1s;
+      border-radius: 0 2px 2px 0;
+    }
+
+    /* ── ANIMATIONS ── */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .nav-links { display: none; }
+      .nav-cta-desktop { display: none; }
+      .hamburger { display: flex; }
+
+      .hero-inner { grid-template-columns: 1fr; text-align: center; padding-top: 7rem; }
+      .hero p { margin-left: auto; margin-right: auto; }
+      .hero-actions { justify-content: center; }
+      .hero-visual { margin-top: 2rem; }
+
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .features-grid { grid-template-columns: 1fr; }
+      .about-grid { grid-template-columns: 1fr; }
+      .about-visual { order: -1; }
+      .about-card-stack { height: auto; display: flex; flex-direction: column; gap: 1rem; }
+      .about-card { position: static; width: 100% !important; }
+      .legal-grid { grid-template-columns: 1fr; }
+      .contact-grid { grid-template-columns: 1fr; }
+      .footer-inner { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 480px) {
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .footer-inner { grid-template-columns: 1fr; }
+      .footer-bottom { flex-direction: column; gap: 0.5rem; text-align: center; }
+      .phone-mockup { width: 240px; height: 480px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="progress-bar" id="progressBar"></div>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-inner">
+      <a href="#hero" class="nav-brand">
+        <img src="image_logo.png" alt="Logo SUGES" class="nav-logo-img">
+        <div class="nav-brand-text">Suara <span>Digital Desa</span></div>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#hero" class="active">Beranda</a></li>
+        <li><a href="#fitur">Fitur</a></li>
+        <li><a href="#tentang">Tentang</a></li>
+        <li><a href="#legal">Legal</a></li>
+        <li><a href="#kontak">Kontak</a></li>
+      </ul>
+      <a href="#kontak" class="nav-cta nav-cta-desktop">
+        Hubungi Kami
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+      </a>
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#hero">Beranda</a>
+    <a href="#fitur">Fitur</a>
+    <a href="#tentang">Tentang</a>
+    <a href="#legal">Legal</a>
+    <a href="#kontak">Kontak</a>
+    <a href="#kontak" class="nav-cta">Hubungi Kami</a>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero-float"></div>
+    <div class="hero-float"></div>
+    <div class="hero-float"></div>
+    <div class="hero-grid-bg"></div>
+    <div class="hero-inner">
+      <div class="hero-text">
+        <div class="hero-badge">
+          <span class="dot"></span>
+          Platform Transparansi Desa v1.0
+        </div>
+        <h1>Transparansi Anggaran Desa <span class="highlight">di Ujung Jari</span></h1>
+        <p>Suara Digital Desa adalah platform yang menghubungkan pemerintah desa dengan warga untuk transparansi APBDes, aspirasi publik, dan monitoring program pembangunan.</p>
+        <div class="hero-actions">
+          <a href="#fitur" class="btn-primary">
+            Mulai Jelajahi
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+          </a>
+          <a href="#tentang" class="btn-outline">
+            Pelajari Lebih Lanjut
+          </a>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="phone-mockup">
+          <div class="phone-notch"></div>
+          <div class="phone-screen">
+            <div class="phone-header">
+              <h4>Suara Digital Desa</h4>
+              <p>Dashboard APBDes 2026</p>
+            </div>
+            <div class="phone-body">
+              <div class="phone-card">
+                <div class="phone-card-title">Total Anggaran</div>
+                <div class="phone-stat">
+                  <div>
+                    <div class="phone-stat-val">Rp 2.4M</div>
+                    <div class="phone-stat-label">Tahun 2026</div>
+                  </div>
+                  <div style="font-size:1.5rem;">Rp</div>
+                </div>
+                <div class="phone-bar"><div class="phone-bar-fill" style="width:72%"></div></div>
+              </div>
+              <div class="phone-card">
+                <div class="phone-card-title">Realisasi</div>
+                <div class="phone-stat">
+                  <div>
+                    <div class="phone-stat-val" style="color:var(--success)">72%</div>
+                    <div class="phone-stat-label">Terealisasi</div>
+                  </div>
+                  <div style="font-size:1.2rem;">Rp 1.73M</div>
+                </div>
+                <div class="phone-bar"><div class="phone-bar-fill" style="width:72%;background:linear-gradient(90deg,#2E7D32,#43A047)"></div></div>
+              </div>
+              <div class="phone-card">
+                <div class="phone-card-title">Aspirasi Masuk</div>
+                <div class="phone-stat">
+                  <div class="phone-stat-val" style="color:var(--tertiary)">24</div>
+                  <div class="phone-stat-label">Bulan Ini</div>
+                </div>
+              </div>
+              <div class="phone-bottom">
+                <div class="phone-nav-item"><div class="phone-nav-icon active"></div><div class="phone-nav-label">Beranda</div></div>
+                <div class="phone-nav-item"><div class="phone-nav-icon"></div><div class="phone-nav-label">APBDes</div></div>
+                <div class="phone-nav-item"><div class="phone-nav-icon"></div><div class="phone-nav-label">Aspirasi</div></div>
+                <div class="phone-nav-item"><div class="phone-nav-icon"></div><div class="phone-nav-label">Program</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <div class="stats fade-in">
+    <div class="stats-grid">
+      <div class="stat-item">
+        <div class="stat-number">100+</div>
+        <div class="stat-label">Desa Terdaftar</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">5K+</div>
+        <div class="stat-label">Warga Aktif</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">200+</div>
+        <div class="stat-label">Aspirasi Terkirim</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">50+</div>
+        <div class="stat-label">Program Dilacak</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <section class="section" id="fitur">
+    <div class="fade-in">
+      <div class="section-label"><span class="bar"></span> Fitur Utama</div>
+      <h2 class="section-title">Semua yang Dibutuhkan Desa<br>Ada di Satu Aplikasi</h2>
+      <p class="section-desc">Dirancang untuk meningkatkan partisipasi warga dan transparansi pengelolaan dana desa secara digital.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card fade-in">
+        <div class="feature-icon fi-blue">
+          <svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>
+        </div>
+        <h3>APBDes Transparan</h3>
+        <p>Akses data Anggaran Pendapatan dan Belanja Desa secara real-time. Lihat detail pos anggaran dan realisasinya.</p>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="feature-icon fi-green">
+          <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg>
+        </div>
+        <h3>Aspirasi Warga</h3>
+        <p>Warga dapat menyampaikan aspirasi, saran, dan keluhan langsung kepada aparatur desa secara digital.</p>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="feature-icon fi-orange">
+          <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
+        </div>
+        <h3>Monitoring Program</h3>
+        <p>Pantau progress program pembangunan desa beserta dokumentasi dan realisasi anggarannya.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="section" id="tentang">
+    <div class="about-grid">
+      <div class="about-visual fade-in">
+        <div class="about-card-stack">
+          <div class="about-card">
+            <div class="about-card-icon" style="background:var(--primary-light)">Rp</div>
+            <h4>Dana Desa</h4>
+            <p>Realisasi anggaran desa ditampilkan secara terbuka dan akuntabel untuk semua warga.</p>
+          </div>
+          <div class="about-card">
+            <div class="about-card-icon" style="background:var(--success-light)">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="#2E7D32"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+            </div>
+            <h4>Partisipasi Publik</h4>
+            <p>Setiap warga desa punya suara untuk ikut serta dalam pembangunan desanya.</p>
+          </div>
+          <div class="about-card">
+            <div class="about-card-icon" style="background:#FFF3E0">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="#E65100"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+            </div>
+            <h4>Keamanan Data</h4>
+            <p>Data warga dilindungi dengan enkripsi dan autentikasi yang aman.</p>
+          </div>
+        </div>
+      </div>
+      <div class="about-text fade-in">
+        <div class="section-label"><span class="bar"></span> Tentang Kami</div>
+        <h2>Mewujudkan Desa Digital yang Transparan & Partisipatif</h2>
+        <p>Suara Digital Desa hadir untuk menjembatani kesenjangan informasi antara pemerintah desa dan warganya. Kami percaya bahwa transparansi anggaran adalah fondasi dari tata kelola desa yang baik.</p>
+        <p>Platform ini memungkinkan warga untuk melihat data anggaran desa secara real-time, menyampaikan aspirasi, dan memantau progress program pembangunan.</p>
+        <ul class="about-list">
+          <li>
+            <div class="check"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            Transparansi penuh atas pengelolaan dana desa
+          </li>
+          <li>
+            <div class="check"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            Saluran langsung aspirasi warga ke pemerintah desa
+          </li>
+          <li>
+            <div class="check"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            Monitoring program pembangunan secara real-time
+          </li>
+          <li>
+            <div class="check"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+            Gratis untuk seluruh masyarakat desa
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- LEGAL -->
+  <section class="section" id="legal">
+    <div class="fade-in" style="text-align:center; margin-bottom:3rem;">
+      <div class="section-label" style="justify-content:center"><span class="bar"></span> Dokumen Legal</div>
+      <h2 class="section-title" style="margin-left:auto;margin-right:auto;">Kebijakan & Ketentuan Hukum</h2>
+      <p class="section-desc" style="margin-left:auto;margin-right:auto;text-align:center;">Kami berkomitmen melindungi hak dan privasi pengguna sesuai hukum yang berlaku.</p>
+    </div>
+    <div class="legal-grid">
+      <a href="privacy.html" class="legal-card fade-in">
+        <div class="legal-icon li-blue">
+          <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 2.18l7 3.12v4.7c0 4.67-3.13 9.06-7 10.2-3.87-1.14-7-5.53-7-10.2V6.3l7-3.12z"/></svg>
+        </div>
+        <h3>Kebijakan Privasi</h3>
+        <p>Cara kami mengumpulkan, menggunakan, dan melindungi data pribadi Anda.</p>
+        <span class="legal-link">Baca Selengkapnya <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg></span>
+      </a>
+      <a href="terms.html" class="legal-card fade-in">
+        <div class="legal-icon li-green">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+        </div>
+        <h3>Syarat & Ketentuan</h3>
+        <p>Ketentuan penggunaan aplikasi yang mengatur hak dan kewajiban pengguna.</p>
+        <span class="legal-link">Baca Selengkapnya <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg></span>
+      </a>
+      <a href="eula.html" class="legal-card fade-in">
+        <div class="legal-icon li-orange">
+          <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 16l-4-4 1.41-1.41L11 14.17l6.59-6.59L19 9l-8 8z"/></svg>
+        </div>
+        <h3>Lisensi Pengguna Akhir</h3>
+        <p>Perjanjian lisensi yang mengatur penggunaan Perangkat Lunak Suara Digital Desa.</p>
+        <span class="legal-link">Baca Selengkapnya <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg></span>
+      </a>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="section" id="kontak">
+    <div class="fade-in" style="text-align:center; margin-bottom:3rem;">
+      <div class="section-label" style="justify-content:center"><span class="bar"></span> Hubungi Kami</div>
+      <h2 class="section-title" style="margin-left:auto;margin-right:auto;">Ada Pertanyaan? Kami Siap Membantu</h2>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-info-card fade-in">
+        <h3>Informasi Kontak</h3>
+        <p>Jangan ragu untuk menghubungi kami jika Anda memiliki pertanyaan, saran, atau masalah terkait aplikasi.</p>
+        <div class="contact-detail">
+          <div class="contact-detail-icon">
+            <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+          </div>
+          <div>
+            <div class="contact-detail-label">Email</div>
+            <div class="contact-detail-value">info@suges-desa.id</div>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-detail-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+          </div>
+          <div>
+            <div class="contact-detail-label">Lokasi</div>
+            <div class="contact-detail-value">Indonesia</div>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-detail-icon">
+            <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+          </div>
+          <div>
+            <div class="contact-detail-label">Jam Layanan</div>
+            <div class="contact-detail-value">Senin — Jumat, 08:00 — 17:00 WIB</div>
+          </div>
+        </div>
+      </div>
+      <div class="contact-form-card fade-in">
+        <h3>Kirim Pesan</h3>
+        <div class="form-group">
+          <label for="name">Nama Lengkap</label>
+          <input type="text" id="name" placeholder="Masukkan nama Anda">
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" placeholder="Masukkan email Anda">
+        </div>
+        <div class="form-group">
+          <label for="subject">Subjek</label>
+          <select id="subject">
+            <option value="">Pilih subjek</option>
+            <option>Pertanyaan Umum</option>
+            <option>Masalah Teknis</option>
+            <option>Permintaan Hapus Akun</option>
+            <option>Kerja Sama</option>
+            <option>Lainnya</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="message">Pesan</label>
+          <textarea id="message" placeholder="Tuliskan pesan Anda di sini..."></textarea>
+        </div>
+        <button class="form-submit" type="button">Kirim Pesan</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <h3>Suara <span>Digital Desa</span></h3>
+        <p>Platform transparansi APBDes dan partisipasi publik masyarakat desa untuk Indonesia yang lebih baik.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Produk</h4>
+        <a href="#fitur">Fitur Aplikasi</a>
+        <a href="#tentang">Tentang Kami</a>
+        <a href="#kontak">Kontak</a>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <a href="privacy.html">Kebijakan Privasi</a>
+        <a href="terms.html">Syarat & Ketentuan</a>
+        <a href="eula.html">Lisensi (EULA)</a>
+      </div>
+      <div class="footer-col">
+        <h4>Dukungan</h4>
+        <a href="#kontak">Bantuan</a>
+        <a href="mailto:info@suges-desa.id">Email Kami</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Suara Digital Desa. Hak Cipta Dilindungi.</span>
+      <span>Dibuat dengan dedikasi untuk desa Indonesia</span>
+    </div>
+  </footer>
+
+  <!-- SCROLL TO TOP -->
+  <button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Kembali ke atas">
+    <svg viewBox="0 0 24 24"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/></svg>
+  </button>
+
+  <script>
+    // ── Navbar scroll ──
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 20);
+    }, { passive: true });
+
+    // ── Active nav link ──
+    const navLinks = document.querySelectorAll('.nav-links a:not(.nav-cta)');
+    const heroSection = document.getElementById('hero');
+    const allSections = document.querySelectorAll('section[id]');
+
+    const navObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(l => l.classList.remove('active'));
+          const id = entry.target.id;
+          const match = document.querySelector(`.nav-links a[href="#${id}"]`);
+          if (match) match.classList.add('active');
+        }
+      });
+    }, { threshold: 0.2, rootMargin: '-68px 0px -50% 0px' });
+    allSections.forEach(s => navObserver.observe(s));
+
+    // ── Mobile menu ──
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    let menuOpen = false;
+
+    hamburger.addEventListener('click', () => {
+      menuOpen = !menuOpen;
+      mobileMenu.style.display = menuOpen ? 'block' : 'none';
+      requestAnimationFrame(() => mobileMenu.classList.toggle('show', menuOpen));
+    });
+
+    mobileMenu.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => {
+        menuOpen = false;
+        mobileMenu.classList.remove('show');
+        setTimeout(() => mobileMenu.style.display = 'none', 300);
+      });
+    });
+
+    // ── Scroll animations ──
+    const fadeEls = document.querySelectorAll('.fade-in');
+    const fadeObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), i * 80);
+          fadeObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+    fadeEls.forEach(el => fadeObserver.observe(el));
+
+    // ── Scroll to top ──
+    const scrollBtn = document.getElementById('scrollTop');
+    window.addEventListener('scroll', () => {
+      scrollBtn.classList.toggle('show', window.scrollY > 500);
+    }, { passive: true });
+
+    // ── Progress bar ──
+    const progressBar = document.getElementById('progressBar');
+    window.addEventListener('scroll', () => {
+      const h = document.documentElement;
+      const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+      progressBar.style.width = pct + '%';
+    }, { passive: true });
+
+    // ── Counter animation ──
+    const counters = document.querySelectorAll('.stat-number');
+    const counterObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const el = entry.target;
+          const text = el.textContent;
+          const num = parseInt(text);
+          const suffix = text.replace(/[0-9]/g, '');
+          let current = 0;
+          const step = Math.ceil(num / 40);
+          const timer = setInterval(() => {
+            current += step;
+            if (current >= num) { current = num; clearInterval(timer); }
+            el.textContent = current + suffix;
+          }, 30);
+          counterObserver.unobserve(el);
+        }
+      });
+    }, { threshold: 0.5 });
+    counters.forEach(c => counterObserver.observe(c));
+  </script>
+</body>
+</html>
