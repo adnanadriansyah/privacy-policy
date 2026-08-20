@@ -13,6 +13,7 @@
     { "src": "/privacy\\.html", "dest": "/privacy.html" },
     { "src": "/terms\\.html", "dest": "/terms.html" },
     { "src": "/eula\\.html", "dest": "/eula.html" },
+    { "src": "/deletion\\.html", "dest": "/deletion.html" },
     { "src": "/(.*)", "dest": "/index.html" }
   ],
   "headers": [
